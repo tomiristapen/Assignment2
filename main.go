@@ -14,7 +14,6 @@ import (
 func main() {
 	srv := server.NewServer()
 
-	// Добавляем обработчик для корневого маршрута
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "<h1>Welcome to the Basic Web Server</h1><p>Available endpoints:</p><ul>"+
 			"<li>POST /data - Add data</li>"+
@@ -24,7 +23,6 @@ func main() {
 			"</ul>")
 	})
 
-	// Другие маршруты
 	http.HandleFunc("/data", handlers.DataHandler(srv))
 	http.HandleFunc("/data/", handlers.DeleteDataHandler(srv))
 	http.HandleFunc("/stats", handlers.StatsHandler(srv))
@@ -40,7 +38,6 @@ func main() {
 		fmt.Fprintf(w, "</ul>")
 	})
 	
-	// Фоновый воркер
 	go srv.StartBackgroundWorker()
 
 	serverInstance := &http.Server{Addr: ":8080"}
@@ -51,7 +48,6 @@ func main() {
 		}
 	}()
 
-	// Завершаем работу сервера
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
